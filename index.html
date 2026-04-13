@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flip Trials</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="noise"></div>
+
+    <main class="app">
+      <header class="topbar panel">
+        <h1>Flip Trials</h1>
+        <p>Random trick run with pressure mode</p>
+      </header>
+
+      <section class="status-grid">
+        <article class="panel stat-card">
+          <h2>Round</h2>
+          <p id="roundValue" class="stat-value">1</p>
+        </article>
+
+        <article class="panel stat-card">
+          <h2>Tier</h2>
+          <p id="tierValue" class="stat-value">Beginner</p>
+        </article>
+
+        <article class="panel stat-card fail-card">
+          <h2>Fail Meter</h2>
+          <p id="failValue" class="stat-value">_ _ _ _</p>
+        </article>
+      </section>
+
+      <section class="panel trick-panel">
+        <p class="trick-label">Current Trick</p>
+        <h3 id="trickName">Press Start Run</h3>
+        <p id="trickMeta" class="trick-meta">4 categories: Beginner, Medium, Hard, Master</p>
+      </section>
+
+      <section class="controls panel">
+        <button id="startBtn" class="btn btn-main">Start Run</button>
+        <button id="successBtn" class="btn btn-success" disabled>Success</button>
+        <button id="failBtn" class="btn btn-danger" disabled>Fail</button>
+        <button id="rerollBtn" class="btn btn-alt" disabled>Reroll Trick</button>
+      </section>
+
+      <section id="feed" class="panel feed" aria-live="polite"></section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

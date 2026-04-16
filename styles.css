@@ -99,8 +99,11 @@ label {
 .setup-panel {
   padding: 14px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+}
+
+.setup-panel-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .select-group {
@@ -286,6 +289,12 @@ select:disabled {
   }
 }
 
+@media (max-width: 980px) {
+  .setup-panel-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 860px) {
   .status-grid-four {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -297,7 +306,7 @@ select:disabled {
 }
 
 @media (max-width: 760px) {
-  .setup-panel {
+  .setup-panel-four {
     grid-template-columns: 1fr;
   }
 }

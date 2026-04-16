@@ -18,6 +18,11 @@ const modeLabels = {
   ground: "On Ground"
 };
 
+const progressionLabels = {
+  fixed: "Stay On Selected Rank",
+  cycle: "Cycle Beginner → Master"
+};
+
 const trickLibrary = [
   { id: "back-flip", name: "Back Flip", aliases: ["Back Tuck"], modes: ["ground", "gtramp"], categories: ["flipping"], difficulty: "beginner" },
   { id: "front-flip", name: "Front Flip", aliases: ["Front Tuck"], modes: ["ground", "gtramp"], categories: ["flipping"], difficulty: "beginner" },
@@ -74,6 +79,8 @@ const state = {
   done: false,
   mode: "gtramp",
   category: "all",
+  progression: "fixed",
+  startDifficultyIndex: 0,
   recentIds: []
 };
 
@@ -93,6 +100,7 @@ const modeHint = document.querySelector("#modeHint");
 const modeSelect = document.querySelector("#modeSelect");
 const categorySelect = document.querySelector("#categorySelect");
 const rankSelect = document.querySelector("#rankSelect");
+const progressionSelect = document.querySelector("#progressionSelect");
 
 const startBtn = document.querySelector("#startBtn");
 const successBtn = document.querySelector("#successBtn");
@@ -108,6 +116,7 @@ rerollBtn.addEventListener("click", freeReroll);
 modeSelect.addEventListener("change", handleModeChange);
 categorySelect.addEventListener("change", updatePreviewMeta);
 rankSelect.addEventListener("change", updatePreviewMeta);
+progressionSelect.addEventListener("change", updatePreviewMeta);
 
 function randomFrom(list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -153,7 +162,8 @@ function getSelectedConfig() {
   const mode = modeSelect.value;
   const category = mode === "ground" ? categorySelect.value : "all";
   const difficulty = rankSelect.value;
-  return { mode, category, difficulty };
+  const progression = progressionSelect.value;
+  return { mode, category, difficulty, progression };
 }
 
 function handleModeChange() {
@@ -167,12 +177,16 @@ function handleModeChange() {
 }
 
 function updateModeHint() {
+  const progressionText = progressionSelect.value === "cycle"
+    ? "Right now it will climb through the ranks."
+    : "Right now it will stay locked to the rank you picked.";
+
   if (modeSelect.value === "gtramp") {
-    modeHint.textContent = "G-Tramp mode pulls from the whole trampoline pool. On Ground mode unlocks Twisting / Flipping / Creative filtering.";
+    modeHint.textContent = `G-Tramp mode pulls from the whole trampoline pool. ${progressionText}`;
     return;
   }
 
-  modeHint.textContent = "On Ground mode lets Julius pick a category first, then the rank loop still climbs Beginner → Medium → Hard → Master.";
+  modeHint.textContent = `On Ground mode unlocks Twisting / Flipping / Creative filtering. ${progressionText}`;
 }
 
 function getPool(mode, category, difficulty) {
@@ -185,18 +199,20 @@ function getPool(mode, category, difficulty) {
 }
 
 function updatePreviewMeta() {
-  const { mode, category, difficulty } = getSelectedConfig();
+  const { mode, category, difficulty, progression } = getSelectedConfig();
   const pool = getPool(mode, category, difficulty);
   const modeLabel = modeLabels[mode];
   const categoryLabel = mode === "ground" ? categoryLabels[category] : "Mixed";
   const difficultyLabel = difficultyLabels[difficulty];
+
+  updateModeHint();
 
   if (state.started) {
     return;
   }
 
   trickName.textContent = "Press Start Run";
-  trickMeta.textContent = `${modeLabel} • ${categoryLabel} • ${difficultyLabel} • ${pool.length} tricks in pool`;
+  trickMeta.textContent = `${modeLabel} • ${categoryLabel} • ${difficultyLabel} • ${progressionLabels[progression]} • ${pool.length} tricks in pool`;
   trickAliases.textContent = "Names + aliases will show here.";
 }
 
@@ -229,8 +245,9 @@ function pickNextTrick() {
   state.recentIds = state.recentIds.slice(0, recentWindowSize);
 
   const categorySummary = state.currentTrick.categories.map((item) => categoryLabels[item]).join(" / ");
+  const progressionSummary = progressionLabels[state.progression];
   trickName.textContent = state.currentTrick.name;
-  trickMeta.textContent = `${modeLabels[state.mode]} • ${difficultyLabels[difficulty]} • ${categorySummary} • ${pool.length} tricks in pool`;
+  trickMeta.textContent = `${modeLabels[state.mode]} • ${difficultyLabels[difficulty]} • ${categorySummary} • ${progressionSummary} • ${pool.length} tricks in pool`;
   trickAliases.textContent = state.currentTrick.aliases.length
     ? `Aliases: ${state.currentTrick.aliases.join(" • ")}`
     : "No common alias listed.";
@@ -245,7 +262,9 @@ function startRun() {
   state.failCount = 0;
   state.mode = config.mode;
   state.category = config.category;
+  state.progression = config.progression;
   state.difficultyIndex = difficultyOrder.indexOf(config.difficulty);
+  state.startDifficultyIndex = state.difficultyIndex;
   state.currentTrick = null;
   state.recentIds = [];
 
@@ -254,11 +273,19 @@ function startRun() {
   startBtn.textContent = "Restart Run";
   pickNextTrick();
   addFeed(
-    `${modeLabels[state.mode]} run started at ${difficultyLabels[difficultyOrder[state.difficultyIndex]]}${state.mode === "ground" ? ` • ${categoryLabels[state.category]}` : ""}.`
+    `${modeLabels[state.mode]} run started at ${difficultyLabels[difficultyOrder[state.difficultyIndex]]} • ${progressionLabels[state.progression]}${state.mode === "ground" ? ` • ${categoryLabels[state.category]}` : ""}.`
   );
 }
 
 function advanceDifficulty() {
+  if (state.progression === "fixed") {
+    state.round += 1;
+    addFeed(`Round ${state.round - 1} complete. Staying on ${difficultyLabels[difficultyOrder[state.difficultyIndex]]}.`);
+    updateStatusCards();
+    pickNextTrick();
+    return;
+  }
+
   state.difficultyIndex += 1;
   if (state.difficultyIndex >= difficultyOrder.length) {
     state.difficultyIndex = 0;

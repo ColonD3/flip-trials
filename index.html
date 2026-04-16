@@ -23,7 +23,7 @@
         <p>Bigger trick pool, cleaner names, G-Tramp + On Ground modes.</p>
       </header>
 
-      <section class="panel setup-panel">
+      <section class="panel setup-panel setup-panel-four">
         <div class="select-group">
           <label for="modeSelect">Game Mode</label>
           <select id="modeSelect">
@@ -43,12 +43,20 @@
         </div>
 
         <div class="select-group">
-          <label for="rankSelect">Start Rank</label>
+          <label for="rankSelect">Rank</label>
           <select id="rankSelect">
             <option value="beginner">Beginner</option>
             <option value="medium">Medium</option>
             <option value="hard">Hard</option>
             <option value="master">Master</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label for="progressionSelect">Rank Progression</label>
+          <select id="progressionSelect">
+            <option value="fixed">Stay On Selected Rank</option>
+            <option value="cycle">Cycle Beginner → Master</option>
           </select>
         </div>
       </section>
@@ -80,7 +88,7 @@
       <section class="panel trick-panel">
         <p class="trick-label">Current Trick</p>
         <h3 id="trickName">Press Start Run</h3>
-        <p id="trickMeta" class="trick-meta">Choose a mode, category, and start rank.</p>
+        <p id="trickMeta" class="trick-meta">Choose a mode, category, rank, and progression.</p>
         <p id="trickAliases" class="trick-aliases">Names + aliases will show here.</p>
       </section>
 

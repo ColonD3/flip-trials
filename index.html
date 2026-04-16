@@ -20,18 +20,55 @@
     <main class="app">
       <header class="topbar panel">
         <h1>Flip Trials</h1>
-        <p>Random trick run with pressure mode</p>
+        <p>Bigger trick pool, cleaner names, G-Tramp + On Ground modes.</p>
       </header>
 
-      <section class="status-grid">
+      <section class="panel setup-panel">
+        <div class="select-group">
+          <label for="modeSelect">Game Mode</label>
+          <select id="modeSelect">
+            <option value="gtramp">G-Tramp</option>
+            <option value="ground">On Ground</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label for="categorySelect">Category</label>
+          <select id="categorySelect">
+            <option value="all">All</option>
+            <option value="twisting">Twisting</option>
+            <option value="flipping">Flipping</option>
+            <option value="creative">Creative</option>
+          </select>
+        </div>
+
+        <div class="select-group">
+          <label for="rankSelect">Start Rank</label>
+          <select id="rankSelect">
+            <option value="beginner">Beginner</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            <option value="master">Master</option>
+          </select>
+        </div>
+      </section>
+
+      <p id="modeHint" class="panel mode-hint"></p>
+
+      <section class="status-grid status-grid-four">
         <article class="panel stat-card">
           <h2>Round</h2>
           <p id="roundValue" class="stat-value">1</p>
         </article>
 
         <article class="panel stat-card">
-          <h2>Tier</h2>
-          <p id="tierValue" class="stat-value">Beginner</p>
+          <h2>Rank</h2>
+          <p id="rankValue" class="stat-value">Beginner</p>
+        </article>
+
+        <article class="panel stat-card">
+          <h2>Mode</h2>
+          <p id="modeValue" class="stat-value">G-Tramp</p>
         </article>
 
         <article class="panel stat-card fail-card">
@@ -43,14 +80,16 @@
       <section class="panel trick-panel">
         <p class="trick-label">Current Trick</p>
         <h3 id="trickName">Press Start Run</h3>
-        <p id="trickMeta" class="trick-meta">4 categories: Beginner, Medium, Hard, Master</p>
+        <p id="trickMeta" class="trick-meta">Choose a mode, category, and start rank.</p>
+        <p id="trickAliases" class="trick-aliases">Names + aliases will show here.</p>
       </section>
 
-      <section class="controls panel">
+      <section class="controls panel controls-five">
         <button id="startBtn" class="btn btn-main">Start Run</button>
         <button id="successBtn" class="btn btn-success" disabled>Success</button>
         <button id="failBtn" class="btn btn-danger" disabled>Fail</button>
-        <button id="rerollBtn" class="btn btn-alt" disabled>Reroll Trick</button>
+        <button id="setupBtn" class="btn btn-alt" disabled>No Setup Here</button>
+        <button id="rerollBtn" class="btn btn-alt-secondary" disabled>Reroll</button>
       </section>
 
       <section id="feed" class="panel feed" aria-live="polite"></section>

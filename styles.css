@@ -5,6 +5,7 @@
   --panel-border: rgba(156, 205, 255, 0.22);
   --accent: #4ff1cc;
   --accent-alt: #76b8ff;
+  --accent-soft: #6ec5ff;
   --warn: #ff5a71;
   --text-main: #f0f8ff;
   --text-soft: #bdd3ea;
@@ -63,7 +64,7 @@ body {
 .app {
   position: relative;
   z-index: 1;
-  width: min(920px, 94vw);
+  width: min(960px, 94vw);
   margin: 28px auto;
   display: grid;
   gap: 14px;
@@ -83,7 +84,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+label {
   margin: 0;
   font-family: "Orbitron", sans-serif;
   letter-spacing: 0.04em;
@@ -94,10 +96,51 @@ h3 {
   color: var(--text-soft);
 }
 
-.status-grid {
+.setup-panel {
+  padding: 14px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.select-group {
+  display: grid;
+  gap: 8px;
+}
+
+.select-group label {
+  color: var(--text-soft);
+  font-size: 0.8rem;
+}
+
+select {
+  width: 100%;
+  border: 1px solid rgba(156, 205, 255, 0.25);
+  border-radius: 12px;
+  padding: 12px;
+  font: inherit;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+select:disabled {
+  opacity: 0.5;
+}
+
+.mode-hint {
+  margin: 0;
+  padding: 12px 14px;
+  color: var(--text-soft);
+  font-size: 0.94rem;
+}
+
+.status-grid {
+  display: grid;
   gap: 14px;
+}
+
+.status-grid-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .stat-card {
@@ -106,12 +149,12 @@ h3 {
 
 .stat-card h2 {
   color: var(--text-soft);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
 }
 
 .stat-value {
   margin-top: 8px;
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-size: clamp(1.05rem, 2.8vw, 1.6rem);
   font-weight: 700;
 }
 
@@ -137,16 +180,24 @@ h3 {
   font-size: clamp(1.3rem, 4.5vw, 2.3rem);
 }
 
-.trick-meta {
+.trick-meta,
+.trick-aliases {
   margin: 12px 0 0;
   color: var(--text-soft);
+}
+
+.trick-aliases {
+  font-size: 0.92rem;
 }
 
 .controls {
   display: grid;
   gap: 10px;
   padding: 12px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.controls-five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .btn {
@@ -190,10 +241,14 @@ h3 {
   background: linear-gradient(120deg, #9fd1ff, var(--accent-alt));
 }
 
+.btn-alt-secondary {
+  background: linear-gradient(120deg, #d4e6ff, var(--accent-soft));
+}
+
 .feed {
   padding: 14px;
-  min-height: 116px;
-  max-height: 220px;
+  min-height: 150px;
+  max-height: 260px;
   overflow: auto;
 }
 
@@ -231,12 +286,25 @@ h3 {
   }
 }
 
-@media (max-width: 760px) {
-  .status-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 860px) {
+  .status-grid-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .controls {
-    grid-template-columns: 1fr 1fr;
+  .controls-five {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .setup-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .status-grid-four,
+  .controls-five {
+    grid-template-columns: 1fr;
   }
 }
